@@ -1,0 +1,83 @@
+
+
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+.bg-image {
+    background-image: url("/static/images/background.jpeg");
+
+    position: fixed;
+    left: -2%;
+    top: -2%;
+    width: 104%;
+    height: 104%;
+
+    z-index: -999;
+    filter: blur(3px);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0%;
+}
+
+header, main, .grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+header {
+    margin-top: 1%;
+}
+
+header input {
+    margin-left: 27%;
+}
+
+main section {
+    width: 23.2%;
+    margin-left: 1.33%;
+    margin-top: 1%;
+
+    background-color: white;
+
+    padding: 0.25em;
+    padding-bottom: 0%;
+
+    border-radius: 1.5%;
+    box-shadow: black 0.2em 0.3em;
+}
+
+main section .grid {
+    align-items: center;
+}
+
+main section h2 {
+    font-size: 1em;
+}
+
+main section .button {
+    background-color: rgb(153, 167, 182);
+    color: white;
+
+    border-radius: 1em;
+
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+    text-align: center;  
+}

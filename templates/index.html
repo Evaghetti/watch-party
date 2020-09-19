@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Watch party</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <div class="bg-image"></div>
+        <header>
+            <input class="col-6" type="text" name="search" id="search" placeholder="Pesquise por uma obra">
+        </header>
+        <main>
+            {% for i in range(10) %}
+            <section>   
+                <div class="grid col-12">
+                    <img class="col-12" src="{{ url_for('static', filename = 'images/lotr.jpeg') }}" alt="Capa Senhor dos Aneis">
+                </div> 
+                <div class="grid col-12">
+                    <i class="col-1 fa fa-video-camera"></i>
+                    <h2 class="col-7">Senhor dos anais</h2>
+                    <h2 class="col-4 button">Assistir</h2>
+                </div>
+            </section>
+            {% endfor %}
+        </main>
+    </body>
+</html>
