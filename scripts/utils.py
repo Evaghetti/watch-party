@@ -32,7 +32,7 @@ def transformaArquivosJSON(arquivos: list):
 
     json = []
     for arquivo in arquivos:
-        json.append({"nome": arquivo, "mime": mime.from_file(arquivo), "path": arquivo})
+        json.append({"nome": arquivo.split("/")[-1].split(".")[0], "mime": mime.from_file(arquivo), "path": arquivo})
 
     return JSON_Encode(json)
 
