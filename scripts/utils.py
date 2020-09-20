@@ -12,7 +12,7 @@ def getListaArquivos(path: str, search: str = None):
         pathAtual = f"{path}/{arquivo}"
 
         # Se tiver passado um filtro, o arquivo atual não for uma pasta e o filtro não estiver no nome do arquivo, ignora.
-        if search is not None and search not in path and isdir(pathAtual):
+        if search is not None and (search not in pathAtual or isdir(pathAtual)):
             continue
 
         # Se for uma pasta gera a lista de arquivos para essa subpasta
