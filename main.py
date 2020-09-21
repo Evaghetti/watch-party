@@ -7,6 +7,10 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
+@app.route("/watch/<filme>")
+def watchParty(filme: str):
+    return render_template("watch_party.html", filme = filme)
+
 @app.route("/videos/")
 @app.route("/videos/<search>")
 def videos(search: str = None):

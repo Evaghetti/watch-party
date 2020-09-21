@@ -1,0 +1,84 @@
+* { box-sizing: border-box; }
+
+body { 
+    background-color: black;
+    margin: 0%; 
+}
+
+video {
+    position: fixed;
+    
+    left: 0%;
+    top: 0%;
+    width: 100vw;
+    height: 100vh;
+
+    z-index: -1;
+}
+
+.grid button {
+    width: 10%;
+    height: 20%;
+}
+
+.grid button#menu {
+    margin-left: 50%;
+}
+
+.chat {
+    width: 30%;
+    height: 100vh;
+
+    background-color: black;
+
+    box-shadow: black -3px 0px 2px;;
+}
+
+.lista-mensagens {
+    height: 92%;
+    overflow-y: scroll;
+
+    background-color: white;
+    padding-left: 0.2em;
+    padding-top: 0.2em;
+}
+
+.lista-mensagens .mensagem, .grid {
+    display: flex;
+}
+
+.lista-mensagens .mensagem:not(:first-of-type) {
+    margin-top: 0.5em;
+}
+
+.lista-mensagens .mensagem p:first-of-type {
+    width: 20%;
+}
+
+.lista-mensagens .mensagem p {
+    margin: 0%;
+    width: 80%;
+}
+
+.input-box {
+    display: flex;
+    height: 7%;
+
+    padding: 0%;
+    margin-top: 1%;
+}
+
+textarea {
+    width: 70%;
+    height: 100%;
+
+    resize: none;
+    border: none;
+
+    margin: 0%;
+}
+
+button.submit {
+    width: 30%;
+    height: 100%;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Watch Party - {{ filme }}</title>
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}"> -->
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'chat.css') }}">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="{{ url_for('static', filename = 'chat.js') }}"></script>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <main>
+            <video controls src="{{ url_for('static', filename = 'teste.mp4') }}"></video>
+            <div class="grid">
+                <button id="voltar">Voltar</button>
+                <button id="menu">Menu</button>
+                <div class="chat">
+                    <div class="lista-mensagens">
+                        {% for i in range(50) %}
+                        <div class="mensagem">
+                            <p>Enzo</p>
+                            <p>Isso é uma mensagem de teste longa pra ver como multiplas linhas vão se comportar</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="input-box">
+                        <textarea name="input"></textarea>
+                        <button class="submit">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
