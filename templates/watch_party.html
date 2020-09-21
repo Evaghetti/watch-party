@@ -10,7 +10,7 @@
     </head>
     <body>
         <main>
-            <video controls src="{{ url_for('static', filename = 'teste.mp4') }}"></video>
+            <video id="video" controls></video>
             <div class="grid">
                 <button id="voltar">Voltar</button>
                 <button id="menu">Menu</button>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="input-box">
                         <textarea name="input"></textarea>
-                        <button class="submit">Enviar</button>
+                        <button id="submit" class="submit">Enviar</button>
                     </div>
                 </div>
             </div>
