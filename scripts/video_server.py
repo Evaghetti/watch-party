@@ -1,19 +1,12 @@
 import asyncio
 import websockets
 
-import asyncio
-import websockets
-
-video = open("videos/teste.mp4", "rb")
-
-async def echo(websocket, path):
-    async for mensagem in websocket:
-        with open("videos/frag_bunny.mp4", "rb") as teste:
-            await websocket.send(teste.read())
-            print("Enviou")
+from room import WatchParty
 
 def run():
-    start_server = websockets.serve(echo, "localhost", 1337)
+    w = WatchParty("videos/frag_bunny.webm")
+
+    start_server = websockets.serve(w, "localhost", 1337)
 
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
