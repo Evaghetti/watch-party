@@ -1,4 +1,4 @@
-let escondido = true;
+let escondido = false;
 
 function toggleChat() {
     if (escondido) {
@@ -20,14 +20,13 @@ $(document).ready(function() {
 
     const mediaSource = new MediaSource();
     const webSocket = new WebSocket("ws://localhost:1337");
-    let sourceBuffer = null;
 
     const video = $("video")[0];
     video.src = URL.createObjectURL(mediaSource);
     mediaSource.addEventListener("sourceopen", (x) => { 
         console.log("sourceopen");
-        sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
-        sourceBuffer.addEventListener("updateend", (ev) => {
+        mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
+        mediaSource.sourceBuffers[0].addEventListener("updateend", (ev) => {
             // webSocket.send("aa");
             console.log("Fechou");
             mediaSource.endOfStream();
@@ -39,12 +38,10 @@ $(document).ready(function() {
     webSocket.onmessage = async function(ev)  {
         console.log("oi", ev.data);
 
-        // sourceBuffer.appendBuffer(ev.data);
-        // ev.data.type = "video/mp4";
         var fileReader = new FileReader();
         fileReader.onload = function(event) {
             console.log(event.target.result);
-            sourceBuffer.appendBuffer(event.target.result);
+            mediaSource.sourceBuffers[0].appendBuffer(event.target.result);
         };
         fileReader.readAsArrayBuffer(ev.data);
     };
