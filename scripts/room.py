@@ -8,6 +8,8 @@ from sys import stderr
 from websockets import WebSocketServerProtocol
 import asyncio
 
+from subprocess import run, PIPE
+
 def gerarUuid():
     return str(uuid1())
 
@@ -20,6 +22,7 @@ class User:
 class WatchParty:
     CRIAR_USUARIO = 1
     MENSAGEM = 2
+    VIDEO = 3
 
     def __init__(self, videoPath: str):
         self.id = gerarUuid()
@@ -45,9 +48,23 @@ class WatchParty:
             elif request["tipo"] == WatchParty.MENSAGEM:
                 for user in self.users:
                     await user.socket.send(JSON_Encode({"tipo": WatchParty.MENSAGEM, "quemEnviou": request["quemEnviou"], "conteudo": request["conteudo"]}))
-            # with open(self.videoPath, "rb") as teste:
-            #     await websocket.send(teste.read())
-            #     print("Enviou")
+            elif request["tipo"] == WatchParty.VIDEO:
+                print(f"[WATCH PARTY] Enviando chunk {self.videoPath}")
+
+                user = None
+                for userAtual in self.users:
+                    if request["id"] == userAtual.id:
+                        user = userAtual
+                        break
+                else:
+                    await websocket.send(JSON_Encode({"tipo": 55, "conteudo": f"ID {request['id']} inválido"}))
+                    continue
+
+                chunk = run(["ffmpeg", "-i", self.videoPath, "-c:v", "h264", "-c:a", "aac", "-movflags", "frag_keyframe+empty_moov+default_base_moof", "-t", "10", '-ss', str(user.offset), "-f", "mp4", "pipe:1"], check=True, stdout=PIPE)
+                user.offset += 10
+                await user.socket.send(chunk.stdout)
+
+                    
 
     def gerarUsuario(self, websocket: WebSocketServerProtocol):
         idGerado = gerarUuid()

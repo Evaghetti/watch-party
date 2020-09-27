@@ -4,7 +4,7 @@ import websockets
 from room import WatchParty
 
 def run():
-    w = WatchParty("videos/frag_bunny.webm")
+    w = WatchParty("videos/boku.mp4")
 
     start_server = websockets.serve(w, "localhost", 1337)
 
