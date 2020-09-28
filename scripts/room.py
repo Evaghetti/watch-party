@@ -9,8 +9,6 @@ from websockets import WebSocketServerProtocol
 import asyncio
 
 from subprocess import run, PIPE
-from threading import Thread
-from time import sleep
 
 def gerarUuid():
     return str(uuid1())
@@ -49,21 +47,19 @@ class WatchParty:
                 for userAtual in (user for user in self.users if user.id != novoUser.id):
                     await userAtual.socket.send(JSON_Encode({"tipo": WatchParty.MENSAGEM, "quemEnviou": "", "conteudo": "Um novo usuário se juntou à watch party!"}))
                 
-                self.threadsEnvioChunks.append(Thread(target=self.enviarChunksCallback, args=[novoUser]))
-                self.threadsEnvioChunks[-1].start()
+                loop = asyncio.get_event_loop()
+                loop.create_task(self.enviarChunks(novoUser))
             elif request["tipo"] == WatchParty.MENSAGEM:
                 for user in self.users:
                     await user.socket.send(JSON_Encode({"tipo": WatchParty.MENSAGEM, "quemEnviou": request["quemEnviou"], "conteudo": request["conteudo"]}))
                 
     async def enviarChunks(self, user: User):
         while True:
-            print("Rodou")
-
             chunk = run(["ffmpeg", "-i", self.videoPath, "-c:v", "h264", "-c:a", "aac", "-movflags", "frag_keyframe+empty_moov+default_base_moof", "-t", "10", '-ss', str(user.offset), "-f", "mp4", "pipe:1"], check=True, stdout=PIPE)
             user.offset += 10
             await user.socket.send(chunk.stdout)
 
-            sleep(1)
+            await asyncio.sleep(1)
 
     # Threading não aceita um método com async, precisa criar esse wrapper pra poder passar pra lá
     def enviarChunksCallback(self, user: User):

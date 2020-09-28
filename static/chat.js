@@ -64,9 +64,7 @@ $(document).ready(function() {
 
         mediaSource.addSourceBuffer(mimec);
         mediaSource.sourceBuffers[0].addEventListener("updateend", (ev) => {
-            webSocket.send(JSON.stringify({id: user.id, tipo: 3}))
             // mediaSource.endOfStream();
-            video.play();
             mediaSource.sourceBuffers[0].timestampOffset += 10;
         });        
     });
