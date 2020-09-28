@@ -9,6 +9,8 @@ from websockets import WebSocketServerProtocol
 import asyncio
 
 from subprocess import run, PIPE
+from threading import Thread
+from time import sleep
 
 def gerarUuid():
     return str(uuid1())
@@ -28,6 +30,7 @@ class WatchParty:
         self.id = gerarUuid()
         self.videoPath = videoPath
         self.users = []
+        self.threadsEnvioChunks = []
 
     async def __call__(self, websocket: WebSocketServerProtocol, url: str):
         async for mensagemCrua in websocket: # Toda mensagem enviada pro server é um JSON
@@ -45,26 +48,30 @@ class WatchParty:
 
                 for userAtual in (user for user in self.users if user.id != novoUser.id):
                     await userAtual.socket.send(JSON_Encode({"tipo": WatchParty.MENSAGEM, "quemEnviou": "", "conteudo": "Um novo usuário se juntou à watch party!"}))
+                
+                self.threadsEnvioChunks.append(Thread(target=self.enviarChunksCallback, args=[novoUser]))
+                self.threadsEnvioChunks[-1].start()
             elif request["tipo"] == WatchParty.MENSAGEM:
                 for user in self.users:
                     await user.socket.send(JSON_Encode({"tipo": WatchParty.MENSAGEM, "quemEnviou": request["quemEnviou"], "conteudo": request["conteudo"]}))
-            elif request["tipo"] == WatchParty.VIDEO:
-                print(f"[WATCH PARTY] Enviando chunk {self.videoPath}")
+                
+    async def enviarChunks(self, user: User):
+        while True:
+            print("Rodou")
 
-                user = None
-                for userAtual in self.users:
-                    if request["id"] == userAtual.id:
-                        user = userAtual
-                        break
-                else:
-                    await websocket.send(JSON_Encode({"tipo": 55, "conteudo": f"ID {request['id']} inválido"}))
-                    continue
+            chunk = run(["ffmpeg", "-i", self.videoPath, "-c:v", "h264", "-c:a", "aac", "-movflags", "frag_keyframe+empty_moov+default_base_moof", "-t", "10", '-ss', str(user.offset), "-f", "mp4", "pipe:1"], check=True, stdout=PIPE)
+            user.offset += 10
+            await user.socket.send(chunk.stdout)
 
-                chunk = run(["ffmpeg", "-i", self.videoPath, "-c:v", "h264", "-c:a", "aac", "-movflags", "frag_keyframe+empty_moov+default_base_moof", "-t", "10", '-ss', str(user.offset), "-f", "mp4", "pipe:1"], check=True, stdout=PIPE)
-                user.offset += 10
-                await user.socket.send(chunk.stdout)
+            sleep(1)
 
-                    
+    # Threading não aceita um método com async, precisa criar esse wrapper pra poder passar pra lá
+    def enviarChunksCallback(self, user: User):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+        loop.run_until_complete(self.enviarChunks(user))
+        loop.close()
 
     def gerarUsuario(self, websocket: WebSocketServerProtocol):
         idGerado = gerarUuid()
