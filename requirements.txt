@@ -1,14 +1,2 @@
 Flask==1.1.2
-Flask-BabelEx==0.9.4
-Flask-Classful==0.14.1
-Flask-KVSession-fork==0.6.3
-Flask-Login==0.5.0
-Flask-Mail==0.9.1
-Flask-Principal==0.4.0
-Flask-RESTful==0.3.8
-Flask-Restless==0.17.0
-Flask-Security==3.0.0
-Flask-SQLAlchemy==2.4.0
-Flask-WTF==0.14.3
-websockets==8.1
-python-magic==0.4.16
+python_magic==0.4.25
